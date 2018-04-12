@@ -1,0 +1,10 @@
+/home/francesko/RiderProjects/WebApplication1/WebApplication1/bin/Debug/netcoreapp2.0/WebApplication1.deps.json
+/home/francesko/RiderProjects/WebApplication1/WebApplication1/bin/Debug/netcoreapp2.0/WebApplication1.runtimeconfig.json
+/home/francesko/RiderProjects/WebApplication1/WebApplication1/bin/Debug/netcoreapp2.0/WebApplication1.runtimeconfig.dev.json
+/home/francesko/RiderProjects/WebApplication1/WebApplication1/bin/Debug/netcoreapp2.0/WebApplication1.dll
+/home/francesko/RiderProjects/WebApplication1/WebApplication1/bin/Debug/netcoreapp2.0/WebApplication1.pdb
+/home/francesko/RiderProjects/WebApplication1/WebApplication1/obj/Debug/netcoreapp2.0/WebApplication1.csproj.CoreCompileInputs.cache
+/home/francesko/RiderProjects/WebApplication1/WebApplication1/obj/Debug/netcoreapp2.0/WebApplication1.AssemblyInfoInputs.cache
+/home/francesko/RiderProjects/WebApplication1/WebApplication1/obj/Debug/netcoreapp2.0/WebApplication1.AssemblyInfo.cs
+/home/francesko/RiderProjects/WebApplication1/WebApplication1/obj/Debug/netcoreapp2.0/WebApplication1.dll
+/home/francesko/RiderProjects/WebApplication1/WebApplication1/obj/Debug/netcoreapp2.0/WebApplication1.pdb
