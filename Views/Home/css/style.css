@@ -67,6 +67,7 @@ a {
 
 .chat-area {
     max-height: 40%;
+    min-height: 200px;
     padding: 10px;
     background-color:#ffffff;
     overflow-y: scroll; 

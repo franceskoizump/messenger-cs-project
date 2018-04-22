@@ -21,14 +21,52 @@ namespace WebApplication1.Controllers
         public IActionResult Index()
         {
             var a = _context.Contacts.ToArray();
+            ViewData["array"] = a;
             ViewBag.array = a;
             return View();
         }
-        public IActionResult Index2()
+        [HttpGet]
+        public IActionResult AddContact()
         {
             return View();
         }
 
+        [HttpPost]
+        public IActionResult AddContact(Contact contact)
+        {
+            _context.Contacts.Add(contact);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        
+        [HttpGet]
+        public IActionResult GetDetails(int id )
+        {
+            Contact[] array = _context.Contacts.ToArray();
+            var c =  from con in array
+                               where con.Id == id
+                               select con;
+            foreach (var a in c)
+            {
+                ViewBag.contact = a;
+            }
+
+            ViewBag.size = _context.Contacts.ToArray().Length;
+            return View();
+        }
+        
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            Contact b = _context.Contacts.Find(id);
+            if (b != null)
+            {
+                _context.Contacts.Remove(b);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+        
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

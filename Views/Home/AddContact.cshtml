@@ -1,0 +1,24 @@
+﻿@model Contact
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Здесь Вы можете придумать себе друга!</title>
+    <h1>Здесь Вы можете придумать себе друга!</h1>
+    @using (Html.BeginForm()) 
+    {
+        @Html.LabelFor(model => model.name, "Как назовем?")
+        <br />
+        @Html.EditorFor(model => model.name)
+        <br /><br />
+        <br /><br />
+        <input type="submit" value="Добавить" />
+    }
+</head>
+<body>
+<div>
+      
+</div>
+</body>
+</html>

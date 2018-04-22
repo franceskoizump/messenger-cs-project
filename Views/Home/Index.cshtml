@@ -1,4 +1,6 @@
 ﻿@page
+@using System.Runtime.InteropServices.ComTypes
+@using SQLitePCL
 @model IndexModel
 <!DOCTYPE html>
 <html lang="ru">
@@ -20,14 +22,21 @@
                     @foreach (var item in ViewBag.array)
                     {
                         <li>
-                            <a href="#">
+                            @{string path = item.Id.ToString();}
+                            <a href="/home/getdetails/@Html.Raw(path)">
                                 <img src="#" alt="Фото" width="20" height="20">
                                 <p> @item.name</p>
+                            </a>
+                            <a href="/home/delete/@Html.Raw(path)">
+                                <p> Ты мне больше не друг</p>
                             </a>
                         </li>
                     }
                     
                 </ul>
+                <a href="/home/addcontact/">
+                    <p> Добавить друга</p>
+                </a>
             </div>
         </section>
         <section class="dialog">
@@ -41,21 +50,10 @@
                 <div class="my-message">
                     <p>Привет, как дела?</p>
                 </div>
-                <div class="message-int">
-                    <p>Хорошо! А у тебя?</p>
-                </div>
-                <div class="my-message">
-                    <p>И у меня тоже ы</p>
-                </div>
-                <div class="my-message">
-                    <p>Чем занимаешься?</p>
-                </div>
-                <div class="message-int">
-                    <p>Да так, ничем)</p>
-                </div>
             </div>
             <div class="chat-input">
                 <form action="#" method="POST">
+            
                     <textarea class="message-text" placeholder="Введите ваше сообщение"></textarea>
                     <button type="submit" class="submit-button">Отправить</button>
                 </form>

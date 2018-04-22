@@ -20,7 +20,7 @@ namespace WebApplication1.Controllers
         {
             var a = _context.Contacts.ToArray();
             ViewBag.array = a;
-            return View();
+            return View(a);
         }
         
         
