@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCaching.Internal;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
@@ -30,6 +31,12 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public IActionResult FindContact()
+        {
+            ViewBag.array = new Contact[0];
+            return View();
+        }
 
         [HttpPost]
         public IActionResult AddContact(Contact contact)
@@ -37,6 +44,15 @@ namespace WebApplication1.Controllers
             _context.Contacts.Add(contact);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult FindContact(Contact pattern)
+        {
+            var a = from name in _context.Contacts.ToArray()
+                where name.name == pattern.name
+                select name;
+            ViewBag.array = a;
+            return View();
         }
         
         [HttpGet]

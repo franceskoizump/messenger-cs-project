@@ -1,0 +1,37 @@
+﻿@model Contact
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Здесь Вы можете поискать себе друга!</title>
+        <h1>Здесь Вы можете поискать себе друга!</h1>
+        @using (Html.BeginForm()) 
+        {
+            @Html.LabelFor(model => model.name, "Как назовем?")
+            <br />
+            @Html.EditorFor(model => model.name)
+            <br /><br />
+            <br /><br />
+            <input type="submit" value="Добавить" />
+        }
+    @foreach (var item in ViewBag.array)
+    {
+        <li>
+            @{string path = item.Id.ToString();}
+            <a href="/home/getdetails/@Html.Raw(path)">
+                <img src="#" alt="Фото" width="20" height="20">
+                <p> @item.name</p>
+            </a>
+            <a href="/home/delete/@Html.Raw(path)">
+                <p> Ты мне больше не друг</p>
+            </a>
+        </li>
+    }
+</head>
+<body>
+<div>
+      
+</div>
+</body>
+</html>
