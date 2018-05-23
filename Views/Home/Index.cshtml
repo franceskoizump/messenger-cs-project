@@ -1,7 +1,12 @@
 ﻿@page
+@using System.Data.Entity.Core.Metadata.Edm
+@using System.Reflection.Metadata
 @using System.Runtime.InteropServices.ComTypes
+@using Microsoft.AspNetCore.Hosting.Internal
+@using Microsoft.AspNetCore.Razor.Language.Intermediate
 @using SQLitePCL
-@model IndexModel
+@using System.Linq
+@model Message
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -46,21 +51,49 @@
             <header class="chat-header">
                 <p class="name">Имя Собеседника</p>
             </header>
-            <div class="chat-area">
-                <div class="message-int">
-                    <p>Привет!</p>
-                </div>
-                <div class="my-message">
-                    <p>Привет, как дела?</p>
-                </div>
+           @* <div class="chat-area">
+                
+                @foreach (var mes in ViewBag.Messages)
+                {
+                    
+                     if (mes.FromId == ViewBag.Myid)
+                     {
+                         <div class="my-message">
+                             <p>@mes.MessageBody</p>
+                         </div>
+                     } else
+                     {
+                         string NameOfPerson = "";
+                         foreach (var p in ViewBag.array)
+                         {
+                             if (p.Id == mes.FromId)
+                             {
+                                 NameOfPerson = p.name;
+                                 break;
+                             }
+                             
+                         }
+                         <div class="message-int">
+                             <p>@Html.Raw(NameOfPerson): </p>
+                             <p>@mes.MessageBody</p>
+                         </div>
+                         
+                     }
+                }
             </div>
             <div class="chat-input">
-                <form action="#" method="POST">
-            
-                    <textarea class="message-text" placeholder="Введите ваше сообщение"></textarea>
-                    <button type="submit" class="submit-button">Отправить</button>
-                </form>
-            </div>
+                @using (Html.BeginForm()) 
+                {
+                    @Html.LabelFor(model => model.MessageBody, "Сообщение")
+                    <br />
+                    @Html.EditorFor(model => model.MessageBody)
+                    <br />
+                    
+                    <br />
+                    <br /><br />
+                    <input type="submit" value="Добавить" />
+                }
+            </div>*@
         </section>
     </div>
 

@@ -1,11 +1,13 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+ using Microsoft.AspNetCore.Authorization;
+ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCaching.Internal;
-using WebApplication1.Data;
+ using Remotion.Linq.Clauses;
+ using WebApplication1.Data;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
@@ -18,34 +20,78 @@ namespace WebApplication1.Controllers
         {
             _context = c;
         }
-
+        
+        [Authorize]
         public IActionResult Index()
         {
             var a = _context.Contacts.ToArray();
             ViewData["array"] = a;
             ViewBag.array = a;
             return View();
+            
         }
-        [HttpGet]
+        [HttpGet][Authorize]
         public IActionResult AddContact()
         {
             return View();
         }
-        [HttpGet]
+        [HttpGet][Authorize]
         public IActionResult FindContact()
         {
             ViewBag.array = new Contact[0];
             return View();
         }
 
-        [HttpPost]
+        [HttpPost][Authorize]
         public IActionResult AddContact(Contact contact)
         {
             _context.Contacts.Add(contact);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-        [HttpPost]
+        [HttpPost][Authorize]
+        public IActionResult Index(Message message)
+        {
+            message.FromId = _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id;;
+            
+            _context.Messages.Add(message);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost][Authorize]
+        public IActionResult GetDetails(int id, Message message)
+        {
+            message.FromId = _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id;;
+            message.ToId = id;
+            message.Id = _context.Messages.ToArray().Length + 1;
+            _context.Messages.Add(new Message()
+            {
+                FromId = message.FromId,
+                MessageBody = message.MessageBody,
+                ToId = message.ToId
+            }); ;
+            _context.SaveChanges();
+            var array = _context.Contacts.ToArray();
+            ViewBag.array = array;
+
+            var c =  from con in array
+                where con.Id == id
+                select con;
+            ViewBag.Messages = from mes in _context.Messages.ToList()
+                where mes.FromId == id || mes.FromId ==
+                      _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id
+                select mes;
+            ViewBag.Myid = _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id;
+            ViewBag.contact = c.FirstOrDefault();
+
+            return View();
+            
+        }
+        
+        
+        
+        [HttpPost][Authorize]
         public IActionResult FindContact(Contact pattern)
         {
             var a = from name in _context.Contacts.ToArray()
@@ -55,26 +101,29 @@ namespace WebApplication1.Controllers
             return View();
         }
         
-        [HttpGet]
+        [HttpGet][Authorize]
         public IActionResult GetDetails(int id )
         {
             Contact[] array = _context.Contacts.ToArray();
             var c =  from con in array
                                where con.Id == id
                                select con;
-            foreach (var a in c)
-            {
-                ViewBag.contact = a;
-            }
+            ViewBag.Messages = from mes in _context.Messages.ToList()
+                where mes.FromId == id || mes.FromId ==
+                      _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id
+                select mes;
+            ViewBag.Myid = _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id;
+            ViewBag.array = _context.Contacts.ToArray();
+            ViewBag.contact = c.FirstOrDefault();
 
             ViewBag.size = _context.Contacts.ToArray().Length;
             return View();
         }
         
-        [HttpGet]
+        [HttpGet][Authorize]
         public ActionResult Delete(int id)
         {
-            Contact b = _context.Contacts.Find(id);
+            var b = _context.Contacts.Find(id);
             if (b != null)
             {
                 _context.Contacts.Remove(b);

@@ -1,4 +1,4 @@
-﻿@model IndexModel
+﻿@*@model IndexModel
 
 @{
     ViewBag.Title = "title";
@@ -7,4 +7,210 @@
 <h1>Тут все что я о нём знаю.</h1>
 <h2>Id = @ViewBag.contact.Id </h2>
 <h3>Имя = @ViewBag.contact.name</h3>
-<h4>У нас целых @ViewBag.size пользователей!</h4>
+<h4>У нас целых @ViewBag.size пользователей!</h4>*@
+@page
+@using System.Data.Entity.Core.Metadata.Edm
+@using System.Reflection.Metadata
+@using System.Runtime.InteropServices.ComTypes
+@using Microsoft.AspNetCore.Hosting.Internal
+@using Microsoft.AspNetCore.Razor.Language.Intermediate
+@using SQLitePCL
+@using System.Linq
+@model Message
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    a {
+        text-decoration: none;
+        color: #000000;
+    }
+
+    .main-container {
+        width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        box-shadow: 0 0 5px 5px #A9A9A9;
+    }
+
+    .dialogs-list {
+        background-color: #ffffff;
+        width: 33%;
+        border-right: 1px solid #696969;;
+    }
+
+    .dialogs-list h2 {
+        text-align: center;
+    }
+
+    .search {
+        width: 90%;
+        margin: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .contacts {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .contacts li {
+        border-bottom: 1px solid #696969;
+    }
+
+    .dialog {
+        background-color: #DCDCDC;
+        width: 66%;
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .chat-header {
+        min-height: 50px;
+        background-color:#000000;
+        margin: 0;
+        padding: 0;
+
+    }
+
+    .name {
+        padding: 10px;
+        color:#ffffff;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .chat-area {
+        max-height: 40%;
+        padding: 10px;
+        background-color:#ffffff;
+        overflow-y: scroll; 
+    }
+
+    .message-int {
+        margin-bottom: 3px;
+        max-width: 50%;
+        background-color: #FAEBD7;
+        padding: 10px;
+        border-radius: 30px;
+    }
+
+    .my-message {
+        margin-bottom: 3px;
+        margin-left: auto;
+        max-width: 50%;
+        background-color:#F0FFF0;
+        padding: 10px;
+        border-radius: 30px;
+    }
+
+    .chat-input {
+        padding: 5px;
+        background-color: #DCDCDC;
+    }
+
+    .message-text {
+        width: 100%;
+        height: 10%;
+        border-radius: 5px;
+    }
+
+    .submit-button {
+        border: none;
+        background-color: #000000;
+        color: aliceblue;
+        border-radius: 10px;
+        width: 100px;
+        height: 30px;
+        margin: 5px auto;
+    }
+</style>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Messenger-dialog</title>
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet">
+    <link rel="stylesheet2" href="css/style.css">
+</head>
+<body>
+    <div class="main-container">
+        <section class="dialogs-list">
+            <form action="#" method="post">
+                <input class="search" type="search" name="search-area" placeholder="Найти">
+            </form>
+            <div class="dialog-list">
+                <h2>Контакты</h2>
+                <ul class="contacts">
+                    @foreach (var item in ViewBag.array)
+                    {
+                        <li>
+                            @{string path = item.Id.ToString();}
+                            <a href="/home/getdetails/@Html.Raw(path)">
+                                <img src="#" alt="Фото" width="20" height="20">
+                                <p> @item.name</p>
+                            </a>
+                            <a href="/home/delete/@Html.Raw(path)">
+                                <p> Ты мне больше не друг</p>
+                            </a>
+                        </li>
+                    }
+                    
+                </ul>
+                <a href="/home/addcontact/">
+                    <p> Добавить друга</p>
+                </a>
+                <a href="/home/findcontact/">
+                    <p>Найти друга</p>
+                </a>
+            </div>
+        </section>
+        <section class="dialog">
+            <header class="chat-header">
+                <p class="name">Имя Собеседника</p>
+            </header>
+            <div class="chat-area">
+                
+                @foreach (var mes in ViewBag.Messages)
+                {
+                    
+                     if (mes.FromId == ViewBag.Myid)
+                     {
+                         <div class="my-message">
+                             <p>@mes.MessageBody</p>
+                         </div>
+                     } else if (mes.FromId == ViewBag.contact.Id)
+                     {
+                         string NameOfPerson = ViewBag.contact.name;
+                         
+                         <div class="message-int">
+                             <p>@Html.Raw(NameOfPerson): </p>
+                             <p>@mes.MessageBody</p>
+                         </div>
+                         
+                     }
+                }
+            </div>
+            <div class="chat-input">
+                @using (Html.BeginForm()) 
+                {
+                    @Html.LabelFor(model => model.MessageBody, "Сообщение")
+                    <br />
+                    @Html.EditorFor(model => model.MessageBody)
+                    <br />
+                    
+                    <br />
+                    <br /><br />
+                    <input type="submit" value="Добавить" />
+                }
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

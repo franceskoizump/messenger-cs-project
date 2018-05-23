@@ -30,6 +30,10 @@
           "target": "Package",
           "version": "[2.0.5, )"
         },
+        "Microsoft.AspNetCore.Authentication.Cookies": {
+          "target": "Package",
+          "version": "[2.1.0-rc1-final, )"
+        },
         "Microsoft.NETCore.App": {
           "suppressParent": "All",
           "target": "Package",

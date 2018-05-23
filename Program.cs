@@ -24,7 +24,7 @@ namespace WebApplication1
                 {
                     var context = services.GetRequiredService<ContactsContext>();
                     DbInitializer.Initialize(context);
-
+                  
                     Console.Out.WriteLine(1);
                 }
                 catch (Exception ex)
