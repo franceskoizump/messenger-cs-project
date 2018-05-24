@@ -19,7 +19,7 @@ namespace WebApplication1.Data
                         select name.name).FirstOrDefault();
             return a;
         }
-        
+        public DbSet<Role> Roles { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Message> Messages { get; set; }
 

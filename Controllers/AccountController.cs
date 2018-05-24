@@ -70,7 +70,9 @@ namespace WebApplication1.Controllers
                 Contact contact = await db.Contacts.FirstOrDefaultAsync(u => u.name == model.Name);
                 if (contact == null)
                 {
-                    db.Contacts.Add(new Contact {name = model.Name, password = model.Password});
+                    Role userRole = await db.Roles.FirstOrDefaultAsync(r => r.Name == "User");
+                    db.Contacts.Add(new Contact {name = model.Name, password = model.Password, Role = userRole});
+
                     await db.SaveChangesAsync();
 
                     await Authenticate(model.Name); 
@@ -88,7 +90,8 @@ namespace WebApplication1.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, userName == "admin" ? "Admin" : "User")
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);

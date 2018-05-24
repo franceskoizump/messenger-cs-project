@@ -25,8 +25,8 @@ namespace WebApplication1.Controllers
         public IActionResult Index()
         {
             var a = _context.Contacts.ToArray();
-            ViewData["array"] = a;
             ViewBag.array = a;
+            ViewBag.Role = User.IsInRole("Admin");
             return View();
             
         }
@@ -64,7 +64,6 @@ namespace WebApplication1.Controllers
         {
             message.FromId = _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id;;
             message.ToId = id;
-            message.Id = _context.Messages.ToArray().Length + 1;
             _context.Messages.Add(new Message()
             {
                 FromId = message.FromId,
@@ -74,13 +73,12 @@ namespace WebApplication1.Controllers
             _context.SaveChanges();
             var array = _context.Contacts.ToArray();
             ViewBag.array = array;
-
+            ViewBag.Role = User.IsInRole("Admin");
             var c =  from con in array
                 where con.Id == id
                 select con;
             ViewBag.Messages = from mes in _context.Messages.ToList()
-                where mes.FromId == id || mes.FromId ==
-                      _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id
+                where mes.FromId == id && mes.ToId == message.FromId || mes.ToId == id && mes.FromId == message.FromId
                 select mes;
             ViewBag.Myid = _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id;
             ViewBag.contact = c.FirstOrDefault();
@@ -102,19 +100,20 @@ namespace WebApplication1.Controllers
         }
         
         [HttpGet][Authorize]
-        public IActionResult GetDetails(int id )
+        public IActionResult GetDetails(int id)
         {
+            int FromId = _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id;;
             Contact[] array = _context.Contacts.ToArray();
             var c =  from con in array
                                where con.Id == id
                                select con;
             ViewBag.Messages = from mes in _context.Messages.ToList()
-                where mes.FromId == id || mes.FromId ==
-                      _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id
+                where mes.FromId == id && mes.ToId == FromId || mes.ToId == id && mes.FromId == FromId
                 select mes;
             ViewBag.Myid = _context.Contacts.ToArray().FirstOrDefault(nm => nm.name == User.Identity.Name).Id;
             ViewBag.array = _context.Contacts.ToArray();
             ViewBag.contact = c.FirstOrDefault();
+            ViewBag.Role = User.IsInRole("Admin");
 
             ViewBag.size = _context.Contacts.ToArray().Length;
             return View();

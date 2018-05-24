@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.Data;
+ using WebApplication1.Models;
 
 namespace WebApplication1
 {
@@ -32,7 +33,7 @@ namespace WebApplication1
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
-            
+            services.AddSignalR();
             services.AddMvc();
         }
 
@@ -51,7 +52,9 @@ namespace WebApplication1
 
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseMvc(routes =>
+            app.UseSignalR(routes => { routes.MapHub<ChatHub>("/chat"); });
+
+        app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",

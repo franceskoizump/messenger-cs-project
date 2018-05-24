@@ -32,16 +32,22 @@
                                 <img src="#" alt="Фото" width="20" height="20">
                                 <p> @item.name</p>
                             </a>
-                            <a href="/home/delete/@Html.Raw(path)">
-                                <p> Ты мне больше не друг</p>
-                            </a>
+                            @if (ViewBag.Role)
+                            {
+                                <a href="/home/delete/@Html.Raw(path)">
+                                    <p> Exterminate </p>
+                                </a>
+                            }
                         </li>
                     }
                     
                 </ul>
+            @if (ViewBag.Role)
+            {
                 <a href="/home/addcontact/">
-                    <p> Добавить друга</p>
+                    <p> Добавить пользователя</p>
                 </a>
+            }
                 <a href="/home/findcontact/">
                     <p>Найти друга</p>
                 </a>
@@ -51,51 +57,9 @@
             <header class="chat-header">
                 <p class="name">Имя Собеседника</p>
             </header>
-           @* <div class="chat-area">
-                
-                @foreach (var mes in ViewBag.Messages)
-                {
-                    
-                     if (mes.FromId == ViewBag.Myid)
-                     {
-                         <div class="my-message">
-                             <p>@mes.MessageBody</p>
-                         </div>
-                     } else
-                     {
-                         string NameOfPerson = "";
-                         foreach (var p in ViewBag.array)
-                         {
-                             if (p.Id == mes.FromId)
-                             {
-                                 NameOfPerson = p.name;
-                                 break;
-                             }
-                             
-                         }
-                         <div class="message-int">
-                             <p>@Html.Raw(NameOfPerson): </p>
-                             <p>@mes.MessageBody</p>
-                         </div>
-                         
-                     }
-                }
-            </div>
-            <div class="chat-input">
-                @using (Html.BeginForm()) 
-                {
-                    @Html.LabelFor(model => model.MessageBody, "Сообщение")
-                    <br />
-                    @Html.EditorFor(model => model.MessageBody)
-                    <br />
-                    
-                    <br />
-                    <br /><br />
-                    <input type="submit" value="Добавить" />
-                }
-            </div>*@
+           
         </section>
     </div>
-
+<a href="/Account/Logout">Logout</a>
 </body>
 </html>
